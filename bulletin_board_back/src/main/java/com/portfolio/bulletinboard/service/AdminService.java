@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import com.portfolio.bulletinboard.entity.AdminCategory;
 import com.portfolio.bulletinboard.entity.Category;
@@ -31,8 +33,19 @@ public class AdminService {
 		return adminRepository.getCategories();
 	}
 
+
+
+	@Transactional
 	public int deleteCategory(int categoryId) {
-		
-		return adminRepository.deleteCategory(categoryId);
+	    try {
+	        adminRepository.deletePost(categoryId);
+	    } catch (Exception e) {
+	    	
+	        TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+	        return 0; 
+	    }
+
+	    return adminRepository.deleteCategory(categoryId);
 	}
+
 }

@@ -42,7 +42,6 @@ public class PostService {
 	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 	    PrincipalUser principalUser = (PrincipalUser) authentication.getPrincipal();
 
-	    // 게시물(Post) 등록
 	    Post postEntity = Post.builder()
 	            .postTitle(postTitle)
 	            .content(content)
@@ -71,7 +70,6 @@ public class PostService {
 	        fileNames.add(tempFileName);
 	    }
 
-	    // 파일 이름(File Name)을 DB에 등록
 	    postRepository.registerFile(fileNames, postEntity.getPostId());
 	    return 0;
 	}

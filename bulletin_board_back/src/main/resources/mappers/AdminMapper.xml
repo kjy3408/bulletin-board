@@ -32,6 +32,14 @@
 			
 	</select>
 	
+	<delete id="deletePost" parameterType="Integer">
+		DELETE
+		FROM
+			post_tb
+		WHERE
+			category_id = #{categoryId}
+	</delete>
+	
 	<delete id="deleteCategory" parameterType="Integer">
 		DELETE
 		FROM

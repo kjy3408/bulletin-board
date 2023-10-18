@@ -15,4 +15,5 @@ public interface AdminRepository {
 	public int addCategory(String newCategoryName);
 	public List<Category> getCategories();
 	public int deleteCategory(int categoryId);
+	public int deletePost(int categoryId);
 }
