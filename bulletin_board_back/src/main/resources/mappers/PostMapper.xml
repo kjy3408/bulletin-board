@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.portfolio.bulletinboard.repository.PostRepository">
+	
+
+	<resultMap type="com.portfolio.bulletinboard.entity.Post" id="PostMap">
+		<id property="postId" column="post_id"/>
+		<result property="postTitle" column="post_title"/>
+		<result property="content" column="post_content"/>
+		<result property="views" column="post_views"/>
+		<result property="uploadDate" column="post_create_date"/>
+		<result property="categoryId" column="category_id"/>
+		<association property="user" resultMap="UserMap"></association>
+		<association property="file" resultMap="FileMap"></association>
+		<association property="comment" resultMap="CommentMap"></association>
+	</resultMap>
+
+	<resultMap type="com.portfolio.bulletinboard.entity.Category" id="CategoryMap">
+		<id property="categoryId" column="category_id"/>
+		<result property="categoryName" column="category_name"/>
+	</resultMap>
+	
+	
+	<resultMap type="com.portfolio.bulletinboard.entity.User" id="UserMap">
+		<id property="userId" column="user_id" />
+		<result property="email" column="email"/>
+		<result property="password" column="password"/>
+		<result property="name" column="name"/>
+		<result property="signupDate" column="signup_date"/>
+		<collection property="authorities" javaType="list" resultMap="AuthorityMap" />
+	</resultMap>
+	
+	<resultMap type="com.portfolio.bulletinboard.entity.Authority" id="AuthorityMap">
+		<id property="authorityId" column="authority_id"/>
+		<result property="userId" column="user_id"/>
+		<result property="roleId" column="role_id"/>
+		<association property="role" resultMap="RoleMap"/>
+	</resultMap>
+	
+	<resultMap type="com.portfolio.bulletinboard.entity.Role" id="RoleMap">
+		<id property="roleId" column="role_id"/>
+		<result property="roleName" column="role_name"/>
+	</resultMap>
+	
+	<resultMap type="com.portfolio.bulletinboard.entity.Comment" id="CommentMap">
+		<id property="commentId" column="comment_id"/>
+		<result property="commentContent" column="comment_content"/>
+		<result property="commentCreateDate" column="comment_create_date"/>
+		<result property="commentAuthorId" column="comment_author"/>
+		<association property="user" resultMap="UserMap"></association>
+	</resultMap>
+	
+	<resultMap type="com.portfolio.bulletinboard.entity.File" id="FileMap">
+		<id property="fileId" column="file_id"/>
+		<result property="fileName" column="file_name"/>
+		<result property="postId" column="post_id"/>
+	</resultMap>
+	
+	<select id="getCategories" resultMap="CategoryMap">
+		SELECT
+			category_id,
+			category_name
+		FROM
+			category_tb
+	</select>
+	
+	<insert id="registerPost" 
+			parameterType="com.portfolio.bulletinboard.entity.Post"
+			useGeneratedKeys="true"
+			keyProperty="postId">
+    	INSERT INTO post_tb
+	    VALUES (
+	        0, 
+	        #{postTitle}, 
+	        #{content}, 
+	        #{userId}, 
+	        DATE_FORMAT(now(), '%Y-%m-%d'),
+	        0,
+	        0,
+	        #{categoryId}
+	    )
+	</insert>
+	
+	<insert id="registerFile" parameterType="com.portfolio.bulletinboard.entity.File">
+	    INSERT INTO upload_file_tb
+	    VALUES
+	    <foreach collection="fileName" item="file" separator=",">
+	        (0, #{file}, #{postId})
+	    </foreach>
+	</insert>
+	
+	<select id="getPosts" parameterType="hashmap" resultMap="PostMap">
+    SELECT
+        pt.post_id,
+        pt.post_title,
+        pt.post_content,
+        pt.post_create_date,
+        pt.post_views,
+<!--         pt.comment_id, -->
+        pt.category_id,
+        pt.user_id,
+        ut.email,
+        ut.name
+<!--         ft.file_id, -->
+<!--         ft.file_name -->
+    FROM
+        post_tb pt
+        LEFT OUTER JOIN user_tb ut ON (pt.user_id = ut.user_id)
+<!--         LEFT OUTER JOIN upload_file_tb ft ON (pt.post_id = ft.post_id) -->
+    WHERE 1=1
+        <if test="categoryId != 5">
+            AND pt.category_id = #{categoryId}
+        </if>
+        <if test="searchValue != null">
+            AND (pt.post_title LIKE CONCAT ('%', #{searchValue}, '%') OR pt.post_content LIKE CONCAT ('%', #{searchValue}, '%'))
+        </if>
+    ORDER BY
+        pt.post_id DESC
+    	LIMIT #{index}, 15
+</select>
+
+
+	<select id="postTotalCount" resultType="Integer">
+		SELECT
+			COUNT(*)
+		FROM
+			post_tb
+	</select>
+
+</mapper>

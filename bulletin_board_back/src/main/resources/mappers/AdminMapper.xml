@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.portfolio.bulletinboard.repository.AdminRepository">
+	<resultMap type="com.portfolio.bulletinboard.entity.AdminCategory" id="AdminCategoryMap">
+		<id property="adminCategoryId" column="admin_category_id"/>
+		<result property="adminCategoryName" column="admin_category_name"/>
+	</resultMap>
+	
+	<resultMap type="com.portfolio.bulletinboard.entity.Category" id="CategoryMap">
+		<id property="categoryId" column="category_id"/>
+		<result property="categoryName" column="category_name"/>
+	</resultMap>
+		
+	<select id="getAdminCategories" resultMap="AdminCategoryMap">
+		SELECT	
+			*
+		FROM
+			admin_category_tb
+	</select>
+	
+	<insert id="addCategory" parameterType="String">
+		INSERT INTO category_tb
+		VALUES (0, #{newCategoryName})
+	</insert>
+	
+	<select id="getCategories" resultMap="CategoryMap">
+		SELECT
+			category_id,
+			category_name
+		FROM
+			category_tb 
+			
+	</select>
+	
+	<delete id="deleteCategory" parameterType="Integer">
+		DELETE
+		FROM
+			category_tb
+		WHERE
+			category_id = #{categoryId}
+	</delete>
+</mapper>
