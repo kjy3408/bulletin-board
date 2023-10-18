@@ -20,11 +20,12 @@ public class Post {
 	private String content;
 	private int views;
 	private String uploadDate;
-	private int categoryId;
 	private int userId;
+	private int categoryId;
+	private Category category;
 	private User user;
 	private Comment comment;
-	private File file;
+	private List<File> file;
   
     public String getTitle() {
         return postTitle;
@@ -38,6 +39,7 @@ public class Post {
     				.views(views)
     				.uploadDate(uploadDate)
     				.categoryId(categoryId)
+    				.category(category)
     				.user(user)
     				.comment(comment)
     				.file(file)

@@ -10,6 +10,7 @@
 		<result property="views" column="post_views"/>
 		<result property="uploadDate" column="post_create_date"/>
 		<result property="categoryId" column="category_id"/>
+		<association property="category" resultMap="CategoryMap"></association>
 		<association property="user" resultMap="UserMap"></association>
 		<association property="file" resultMap="FileMap"></association>
 		<association property="comment" resultMap="CommentMap"></association>
@@ -117,7 +118,7 @@
     ORDER BY
         pt.post_id DESC
     	LIMIT #{index}, 15
-</select>
+	</select>
 
 
 	<select id="postTotalCount" resultType="Integer">
@@ -125,6 +126,29 @@
 			COUNT(*)
 		FROM
 			post_tb
+	</select>
+	
+	<select id="readPostData" parameterType="Integer" resultMap="PostMap">
+		SELECT
+			pt.post_id,
+			pt.post_title,
+			pt.post_content,
+			pt.post_create_date,
+			pt.post_views,
+			pt.comment_id,
+			pt.category_id,
+			pt.user_id,
+			ut.name,
+			ft.file_id,
+			ft.file_name,
+			ct.category_name
+		FROM
+			post_tb pt
+			LEFT OUTER JOIN user_tb ut ON (pt.user_id = ut.user_id)
+			LEFT OUTER JOIN upload_file_tb ft ON (pt.post_id = ft.post_id)
+			LEFT OUTER JOIN category_tb ct ON (ct.category_id = pt.post_id)
+		WHERE
+			pt.post_id = #{postId}
 	</select>
 
 </mapper>

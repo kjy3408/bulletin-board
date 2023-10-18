@@ -16,4 +16,5 @@ public interface PostRepository {
 	public int registerFile(List<String> fileName, int postId);
 	public List<Post> getPosts(Map<String, Object> map);
 	public int postTotalCount();
+	public Post readPostData(int postId);
 }

@@ -1,5 +1,7 @@
 package com.portfolio.bulletinboard.entity;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,6 +14,6 @@ import lombok.NoArgsConstructor;
 public class File {
 
 	private int fileId;
-	private String fileName;
 	private int postId;
+	private String fileName;
 }

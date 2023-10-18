@@ -93,4 +93,15 @@ public class PostService {
 				
 		return responseMap;
 	}
+	
+	public Map<String, Object> readPostData(int postId) {
+		System.out.println(postId);
+		List<PostResponseDto> list = new ArrayList<>();
+		
+		
+		Map<String, Object> responseMap = new HashMap<>();
+		responseMap.put("postData", postRepository.readPostData(postId).toDto());
+		
+		return responseMap;
+	}
 }

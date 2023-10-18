@@ -31,7 +31,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
        WebMvcConfigurer.super.addResourceHandlers(registry);
        String absolutePath = Paths.get("").toAbsolutePath().toString().replace("\\", "/");
        String resourcePath = absolutePath + filePath;
-       registry.addResourceHandler("/image/**")
+       registry.addResourceHandler("/upload/**")
              .addResourceLocations("file:///" + resourcePath)
              .resourceChain(true)
              .addResolver(new PathResourceResolver() {

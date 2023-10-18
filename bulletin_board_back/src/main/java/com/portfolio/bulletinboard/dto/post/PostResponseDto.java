@@ -1,5 +1,8 @@
 package com.portfolio.bulletinboard.dto.post;
 
+import java.util.List;
+
+import com.portfolio.bulletinboard.entity.Category;
 import com.portfolio.bulletinboard.entity.Comment;
 import com.portfolio.bulletinboard.entity.File;
 import com.portfolio.bulletinboard.entity.User;
@@ -18,7 +21,8 @@ public class PostResponseDto {
 	private int views;
 	private int categoryId;
 	
+	private Category category;
 	private Comment comment;
-	private File file;
+	private List<File> file;
 	private User user;
 }
